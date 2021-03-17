@@ -6,7 +6,11 @@ class UserController {
   static async find (req, res) {
     try {
       const users = await User.find()
-      res.status(200).json(users)
+      const result = users.map(user => {
+        return { _id: user._id, name: user.name, phone_number: user.phone_number, email: user.email }
+      })
+      console.log(result)
+      res.status(200).json(result)
     } catch (err) {
       console.log(err)
     }
@@ -21,7 +25,8 @@ class UserController {
       res.status(200).json({ messages: 'the account was successfully deleted'})
     } catch (err) {
       console.log(err, '<<<err')
-      res.status(404).json(err)
+      if (err.Error) res.status(404).json(err)
+      res.status(500).json(err)
     }
   }
 
@@ -29,7 +34,8 @@ class UserController {
     try {
       const user = await User.register(req.body)
       console.log(user)
-      res.status(201).json(user.ops)
+      const { _id, name, email } = user.ops[0]
+      res.status(201).json({ _id, name, email })
     } catch (err) {
       console.log(err)
     }
@@ -55,7 +61,8 @@ class UserController {
       })
     } catch (err) {
       console.log(err, '<<<err')
-      res.send(err)
+      if (err.Error) res.status(401).json(err)
+      res.status(500).json(err)
     }
   }
 }

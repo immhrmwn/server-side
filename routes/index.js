@@ -3,7 +3,7 @@ const UserController = require('../controller/userController')
 const { authenticate } = require('../middlewares/auth')
 
 router.get('/', (req, res) => {
-  res.status(200).json({ messages: 'Hallo Imam ^_^'})
+  res.status(200).json({ messages: 'Hallo Imam ^_^', project: 'test-server-side'})
 })
 
 router.post('/login', UserController.login)
